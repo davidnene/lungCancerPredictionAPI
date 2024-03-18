@@ -42,7 +42,7 @@ def predict():
     prob ,prediction= ml_app(image, model_test)
     # Return the prediction in JSON format
     results = {
-        'probaility': round(prob, 2),
+        'probability': round(prob, 2),
         'prediction': prediction
     }
     return jsonify(results)
