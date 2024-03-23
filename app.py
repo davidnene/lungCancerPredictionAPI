@@ -3,8 +3,12 @@ import timm
 import torch
 import numpy as np
 from predict import ml_app
+from flask_cors import CORS
+import base64
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000"]}})
+
 
 # Create model blueprint
 model = timm.create_model('resnet50', pretrained=True)
@@ -26,15 +30,23 @@ model.load_state_dict(torch.load('model\model_ResNet50_acc_max.pt', map_location
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Check if image file is present in the request
-    if 'image' not in request.files:
+    # Check if image base64 is present in the request
+    if 'cancer_image' not in request.get_json():
         return jsonify({'error': 'No image provided'})
+    # Get the base64 string from the request
+    photo = request.get_json()['cancer_image']
+    
+    # Decode the base64 string
+    photo_data = base64.b64decode(photo)
+    
+    # create a png file and write bytes
+    with open("image.png", "wb") as file:
+        file.write(photo_data)
 
-    # Read the image file from the request
-    image = request.files['image']
+    img = 'image.png'
 
     # Pass the image to the model for prediction
-    prob ,prediction= ml_app(image, model)
+    prob ,prediction= ml_app(img, model)
     
     # Return the prediction in JSON format
     results = {
