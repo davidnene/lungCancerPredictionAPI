@@ -26,7 +26,7 @@ model.fc = torch.nn.Sequential(torch.nn.Linear(2048, 256),
                                     torch.nn.Softmax()
                                     )
 # Load model
-model.load_state_dict(torch.load('model\model_ResNet50_acc_max.pt', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('model_ResNet50_acc_max.pt', map_location=torch.device('cpu')))
 
 @app.route('/predict', methods=['POST'])
 def predict():
