@@ -7,7 +7,7 @@ from flask_cors import CORS
 import base64
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000"]}})
+CORS(app, resources={r"/*": {"origins":"*"}})
 
 
 # Create model blueprint
